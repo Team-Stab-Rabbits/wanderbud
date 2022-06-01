@@ -3,8 +3,8 @@ const userController = require('../controllers/userController');
 const router = express.Router();
 
 // Create a new user (signup + login)
-router.post('/signup/users', 
-    userController.signupUser, 
+router.post('/signup/users',
+    userController.signupUser,
     (req, res) => {
         res.status(200).json(res.locals.userData);
     });
@@ -16,11 +16,11 @@ router.post('/signup/users',
 //         res.status(200).json(res.locals.userData);
 //     });
 
-router.post('/login', 
-userController.loginUser, userController.userJourneys,
-(req, res) => {
-    res.status(200).json({userData: res.locals.userData, journeyData: res.locals.allJourneys});
-});
+router.post('/login',
+    userController.loginUser, userController.userJourneys,
+    (req, res) => {
+        return res.status(200).json({ userData: res.locals.userData, journeyData: res.locals.allJourneys });
+    });
 
 
 module.exports = router;

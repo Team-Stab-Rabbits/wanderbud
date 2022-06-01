@@ -10,11 +10,11 @@ export const journeySlice = createSlice({
     upcomingJourneys: [],
     completedJourneys: []
   },
-  
+
   //reducer functions
   reducers: {
-      // This populates the list of trips you've added after you add a new trip. Once you type in location date etc... it poupulates
-      // Below the UI, but when you visit profile it doesn't actually appear there. It does, however, appear when you log in again.
+    // This populates the list of trips you've added after you add a new trip. Once you type in location date etc... it poupulates
+    // Below the UI, but when you visit profile it doesn't actually appear there. It does, however, appear when you log in again.
     fetchJourney: (state, action) => {
       //response is array
       state.journeys = [...action.payload];
@@ -31,8 +31,8 @@ export const journeySlice = createSlice({
     // updates the database accordingly.
     // Should simply push a new entry to the list of upcoming journies. 
     joinJourney: (state, action) => {
-        // state.posts[action.payload.id].buds.push(action.payload.user)
-        state.upcomingJourneys.push(action.payload);
+      // state.posts[action.payload.id].buds.push(action.payload.user)
+      state.upcomingJourneys.push(action.payload);
     },
 
     // haven;t dug into this yet, but It appears to be the inverse of the joinJourney function. 
