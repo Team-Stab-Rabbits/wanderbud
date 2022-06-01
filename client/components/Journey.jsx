@@ -6,15 +6,15 @@ import { selectUserId } from "../reducers/userSlice";
 import wanderbud from '../media/wanderbud-logo.png';
 
 // const Journey = ({origin, destination, date, journey_id})=>{
-const Journey = ({journey, index}) => {
-    const [ toggle, setToggle ] = useState(true);
-    const [ error, setError ] = useState(false);
+const Journey = ({ journey, index }) => {
+    const [toggle, setToggle] = useState(true);
+    const [error, setError] = useState(false);
     const dispatch = useDispatch();
     const user_id = useSelector(selectUserId);
 
-    const { origin, destination, date, creator, distance, cost, journey_id} = journey;
+    const { origin, destination, startDate, endDate, creator, distance, cost, journey_id } = journey;
     const { firstName } = creator;
-    
+
 
     const joinObj = {
         userID: user_id,
@@ -26,9 +26,9 @@ const Journey = ({journey, index}) => {
 
     const handleDelete = (e) => {
         e.preventDefault()
-        const deleteJourney = async() => { 
+        const deleteJourney = async () => {
             try {
-                const deleteData = await axios.delete('http://localhost:3000/journey', {data:{joinObj}});
+                const deleteData = await axios.delete('http://localhost:3000/journey', { data: { joinObj } });
                 console.log('delete response', deleteData)
             }
             catch (err) {
@@ -47,10 +47,10 @@ const Journey = ({journey, index}) => {
         e.preventDefault();
         const { userID, journeyID } = joinObj;
         //checks for input fields being defined
-        if (!userID || !journeyID){
+        if (!userID || !journeyID) {
             setError(true)
             console.log('Journey error')
-        //if all fields present, send data to server
+            //if all fields present, send data to server
         } else if (toggle === true) {
 
             const join = async () => {
@@ -59,7 +59,7 @@ const Journey = ({journey, index}) => {
                     console.log('joinData', joinData.data);
                     //dispatch addUser to send the data payload with generated id to redux store
 
-    
+
                     /* NEED TO CHANGE !!!!!!!! have backend send status, if user already exists in database, have signup error status be true and do not navigate to posts*/
                     if (joinData.data) {
                         dispatch(joinJourney(joinData.data));
@@ -70,7 +70,7 @@ const Journey = ({journey, index}) => {
                     console.log('error', err);
                 }
                 //send post request to database to register user
-                
+
             }
 
             join();
@@ -78,11 +78,11 @@ const Journey = ({journey, index}) => {
         } else if (toggle === false) {
             const unjoin = async () => {
                 try {
-                    const unjoinData = await axios.delete('http://localhost:3000/journey/join', {data:{joinObj}});
+                    const unjoinData = await axios.delete('http://localhost:3000/journey/join', { data: { joinObj } });
                     console.log('unjoinData', unjoinData.data);
                     //dispatch addUser to send the data payload with generated id to redux store
 
-    
+
                     dispatch(unjoinJourney(journeyID));
                     // if (unjoinData.data) {
                     //     dispatch(deleteUser(unjoinData.data));
@@ -94,14 +94,14 @@ const Journey = ({journey, index}) => {
                     console.log('error', err);
                 }
                 //send post request to database to register user
-                
+
             }
 
             unjoin();
         }
     }
 
-    
+
     return (
         <div className="journey-component">
             <div className="journey-logo">
@@ -120,13 +120,17 @@ const Journey = ({journey, index}) => {
                     </div>
 
                     <div className="journey-label">
-                        <p className="journey-trait-label" >Date:</p>
-                        <p className="journey-trait" >{date}</p>
+                        <p className="journey-trait-label" >Start Date:</p>
+                        <p className="journey-trait" >{startDate}</p>
+                    </div>
+                    <div className="journey-label">
+                        <p className="journey-trait-label" >End Date:</p>
+                        <p className="journey-trait" >{endDate}</p>
                     </div>
                     <div className="join-btn">
-                        {creator.user_id === user_id? <button className="deleteButton" onClick={handleDelete}>X</button>: <button className="joinButton" onClick={handleClick}>{toggle? "Join" : "Unjoin"}</button>}
+                        {creator.user_id === user_id ? <button className="deleteButton" onClick={handleDelete}>X</button> : <button className="joinButton" onClick={handleClick}>{toggle ? "Join" : "Unjoin"}</button>}
                     </div>
-                
+
 
                 </div>
 
@@ -149,7 +153,7 @@ const Journey = ({journey, index}) => {
                 {error && <p>Operation unsuccessful</p>}
             </div>
         </div>
-        
+
     )
 
 }
