@@ -7,35 +7,36 @@ const journeyController = {};
 // Creates a Journey
 // Recieves origin, destination, date, driver, userID from Front End
 journeyController.createJourney = (req, res, next) => {
-    const {origin, destination, date} = req.body;
+    // * add startDate, endDate to req.body 
+    const { origin, destination, startDate, endDate } = req.body;
 
-    // create a instance in journey table: origin, destination, date, distance=0, totalCost=0, completed=0
-    const query = `INSERT INTO "journey" ("origin", "destination", "date") VALUES ('${origin}', '${destination}', '${date}')`
+    // create a instance in journey table: origin, destination, date, distance=0, totalCost=0, completed=0 -> * changed date to startDate, endDate 
+    const query = `INSERT INTO "journey" ("origin", "destination", "startDate", "endDate") VALUES ('${origin}', '${destination}', '${startDate}', '${endDate}')`
     db.query(query)
-    .then(res => {
-        return next();
-    })
-    .catch(err => {
-        console.log("Error creating Journey...");
-    })
+        .then(res => {
+            return next();
+        })
+        .catch(err => {
+            console.log("Error creating Journey...");
+        })
 }
 
 // Get JourneyID of journey just created
 journeyController.getJourneyID = (req, res, next) => {
-    const {origin, destination, date} = req.body;
+    const { origin, destination, startDate, endDate } = req.body;
     let journeyID;
 
     async function gettingID() {
         try {
-            // get id of journey just created 
-            const response = await db.query(`SELECT "id" FROM "journey" WHERE "origin"='${origin}' AND "destination"='${destination}' AND "date"='${date}'`)
+            // get id of journey just created -> * changed date to startDate and endDate 
+            const response = await db.query(`SELECT "id" FROM "journey" WHERE "origin"='${origin}' AND "destination"='${destination}' AND "startDate"='${startDate}' AND "endDate"='${endDate}'`)
             journeyID = await response.rows[0].id;
             console.log("Journey ID:", journeyID);
             res.locals.journeyID = journeyID;
             res.locals.driver = 1;
-            return next(); 
+            return next();
         }
-        catch(err) {
+        catch (err) {
             console.log("Error selecting JourneyID...");
         }
     }
@@ -44,46 +45,46 @@ journeyController.getJourneyID = (req, res, next) => {
 
 // Create instance in User Journey Table (when we create a journey vs join journey)
 journeyController.createUserJourney = (req, res, next) => {
-    const {user_id} = req.body
+    const { user_id } = req.body
     const driver = res.locals.driver
     const journey_id = res.locals.journeyID
-    console.log(driver,user_id, journey_id);
+    console.log(driver, user_id, journey_id);
 
     // create a instance in userJourney table: userID, journeyID, cost=0, driver 
     if (driver === 1 && user_id != undefined) {
         const query = `INSERT INTO "userJourney" ("userID","journeyID","driver") VALUES (${user_id},${journey_id},'${driver}');`
         db.query(query)
-        .then(res => {
-            return next();
-        })
-        .catch(err => {
-            console.log("Error creating UserJourney...");
-        })  
+            .then(res => {
+                return next();
+            })
+            .catch(err => {
+                console.log("Error creating UserJourney...");
+            })
     }
     else {
         const query = `INSERT INTO "userJourney" ("userID","journeyID","driver") VALUES (${res.locals.sendUserID},${journey_id},'0');`
         db.query(query)
-        .then(res => {
-            return next();
-        })
-        .catch(err => {
-            console.log("Error creating UserJourney...");
-        })  
+            .then(res => {
+                return next();
+            })
+            .catch(err => {
+                console.log("Error creating UserJourney...");
+            })
     }
 }
 
 // Get firstName from User ID
 journeyController.getfirstName = (req, res, next) => {
-    const {user_id} = req.body;
+    const { user_id } = req.body;
 
     async function getName() {
         try {
             const response = await db.query(`SELECT "firstName" FROM "user" WHERE "id"=${user_id}`)
             firstN = await response.rows[0].firstName;
             res.locals.firstN = firstN;
-            return next(); 
+            return next();
         }
-        catch(err) {
+        catch (err) {
             console.log("Error finding first name...");
         }
     }
@@ -93,32 +94,40 @@ journeyController.getfirstName = (req, res, next) => {
 // send back created journey that was just created: 
 // journeyID, origin, destination, date, creatorObject {userID, firstName}, distance
 journeyController.getJourney = (req, res, next) => {
-    const {origin, destination, date, user_id} = req.body;
-    console.log("First Name here too!",res.locals.firstN)
-    
+    // * changed date to startDate and endDate
+    const { origin, destination, startDate, endDate, user_id } = req.body;
+    console.log("First Name here too!", res.locals.firstN)
+
     async function getJourney() {
         try {
-            const response = await db.query(`SELECT * FROM "journey" WHERE "origin"='${origin}' AND "destination"='${destination}' AND "date"='${date}'`)
+            // * changed date to startDate and endDate & Journey object key 'date'
+            const response = await db.query(`SELECT * FROM "journey" WHERE "origin"='${origin}' AND "destination"='${destination}' AND "startDate"='${startDate}' AND "endDate"='${endDate}'`)
             foundJourney = await response.rows;
-            let creator = {user_id:user_id, firstName:res.locals.firstN}
-            let journey = {'journey_id':foundJourney[0].id, 'origin':foundJourney[0].origin, 'destination':foundJourney[0].destination, 
-            'date':foundJourney[0].date.toString().slice(0, 10), 'creator':creator, 'distance':foundJourney[0].distance}
+            let creator = { user_id: user_id, firstName: res.locals.firstN }
+            let journey = {
+                'journey_id': foundJourney[0].id, 'origin': foundJourney[0].origin, 'destination': foundJourney[0].destination,
+                // * changed here 
+                'startDate': foundJourney[0].startDate.toString().slice(0, 10),
+                'endDate': foundJourney[0].endDate.toString().slice(0, 10),
+                'creator': creator, 'distance': foundJourney[0].distance
+            }
             let result = [journey]
             res.locals.journey = result
             return next();
         }
-        catch(err) {
+        catch (err) {
             console.log("Error can not find journey...");
         }
     }
-    
+
     getJourney();
 }
 
 // send back journeys that match origin, destination and date
 // array of objects, each object includes: journeyID, origin, destination, date, distance
 journeyController.getEntry = (req, res, next) => {
-    const {origin, destination, date} = req.body;
+    // * changed here date to startdate and end date 
+    const { origin, destination, startDate, endDate } = req.body;
     console.log('request items', origin)
     async function getJourney() {
         try {
@@ -130,78 +139,82 @@ journeyController.getEntry = (req, res, next) => {
             FULL JOIN "user" u
             ON uj."userID" = u."id"
             WHERE uj."userID" IS NOT NULL) AS A
-            WHERE A."origin"='${origin}' and A."destination"='${destination}' and A."date"='${date}'`);
+            WHERE A."origin"='${origin}' and A."destination"='${destination}' and A."startDate"='${startDate}' and A."endDate"='${endDate}'`);
 
             foundJourney = await response.rows;
 
             let result = [];
             for (let i = 0; i < foundJourney.length; i++) {
-                let creator = {user_id:foundJourney[i].userID, firstName:foundJourney[i].firstName}
-                let journey = {'journey_id':foundJourney[i].id, 'origin':foundJourney[i].origin, 'destination':foundJourney[i].destination, 
-                'date':foundJourney[i].date.toString().slice(0, 10), 'creator':creator, 'distance':foundJourney[i].distance}
+                let creator = { user_id: foundJourney[i].userID, firstName: foundJourney[i].firstName }
+                let journey = {
+                    'journey_id': foundJourney[i].id, 'origin': foundJourney[i].origin, 'destination': foundJourney[i].destination,
+                    'startDate': foundJourney[0].startDate.toString().slice(0, 10),
+                    'endDate': foundJourney[0].endDate.toString().slice(0, 10),
+                    'creator': creator, 'distance': foundJourney[i].distance
+                }
                 result.push(journey)
             }
             res.locals.journey = result;
             return next();
         }
-        catch(err) {
+        catch (err) {
             console.log("Error can not find journey...");
         }
     }
-    
+
     getJourney();
 }
 
- // Error Handling, what if user has already joined?
+// Error Handling, what if user has already joined?
 journeyController.join = (req, res, next) => {
 
-    const {userID, journeyID} = req.body;
+    const { userID, journeyID } = req.body;
     console.log(req.body)
     async function userJourney() {
         try {
-                const response = await db.query(`SELECT * FROM "journey" WHERE "id"=${journeyID}`);
-                const joinedJourney = await response.rows[0];
-                res.locals.sendUserID = userID;
-                res.locals.journeyID = journeyID;
-                res.locals.join = {...joinedJourney, date: joinedJourney.date.toString().slice(0, 10)}
-                return next();
-            }
-            catch(err) {
-                console.log("Error in creating/joining userJourney instance...");
-            }
+            const response = await db.query(`SELECT * FROM "journey" WHERE "id"=${journeyID}`);
+            const joinedJourney = await response.rows[0];
+            res.locals.sendUserID = userID;
+            res.locals.journeyID = journeyID;
+            res.locals.join = { ...joinedJourney, startDate: joinedJourney.startDate.toString().slice(0, 10), endDate: joinedJourney.endDate.toString().slice(0, 10) }
+            return next();
         }
-    
-        userJourney();
+        catch (err) {
+            console.log("Error in creating/joining userJourney instance...");
+        }
+    }
+
+    userJourney();
 }
 
 // remove passenger/driver from userJourney with journeyID and userID
 journeyController.unjoin = (req, res, next) => {
-    const {userID, journeyID} = req.body.joinObj;
+    const { userID, journeyID } = req.body.joinObj;
     console.log(req.body.joinObj)
 
     let query = `DELETE FROM "userJourney" WHERE "userID"=${userID} AND "journeyID"=${journeyID}`
     db.query(query)
-    .then(res => {
-       return next();
-    })
-    .catch(err => {
-        console.log("Error can't remove join..");
-    }) 
+        .then(res => {
+            return next();
+        })
+        .catch(err => {
+            console.log("Error can't remove join..");
+        })
 }
 
 // deletes journey that driver created
 journeyController.deleteEntry = (req, res, next) => {
-    const {journeyID} = req.body.joinObj;
+    const { journeyID } = req.body.joinObj;
     console.log(journeyID);
 
     let query = `DELETE FROM "journey" WHERE "id"=${journeyID}`
     db.query(query)
-    .then(res => {
-       return next();
-    })
-    .catch(err => {
-        console.log("Error can't delete journey..");
-    }) 
+        .then(res => {
+            return next();
+        })
+        .catch(err => {
+            console.log("Error can't delete journey..");
+        })
 }
 
 /* // Update after a journey is completed
