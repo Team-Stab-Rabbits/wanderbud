@@ -3,31 +3,31 @@
 --
 
 CREATE TABLE public.user (
-    "id" serial integer,
+    "id" serial,
     "firstName" varchar NOT NULL,
     "lastName" varchar,
     "age" integer,
     "email" varchar unique NOT NULL,
     "password" varchar NOT NULL,
-    constraint pk_user PRIMARY KEY "id"
-)
+    CONSTRAINT "user_pk" PRIMARY KEY ("id")
+);
 
 CREATE TABLE public.journey (
-    "id" serial integer,
+    "id" serial,
     "origin" varchar,
     "destination" varchar,
     "startDate" date,
     "endDate" date,
     "distance" integer,
-    "totalCost" integer
-    constraint pk_journey PRIMARY KEY "id"
-)
+    "totalCost" integer,
+    CONSTRAINT "journey_pk" PRIMARY KEY ("id")
+);
 
 CREATE TABLE public.userJourney (
-    "id" serial integer,
+    "id" serial,
     "userID" integer NOT NULL,
     "journeyID" integer NOT NULL,
     "cost" integer,
-    "driver" integer
-    constraint pk_userJourney PRIMARY KEY "id"
-)
+    "driver" integer,
+    CONSTRAINT "userJourney_pk" PRIMARY KEY ("id")
+);

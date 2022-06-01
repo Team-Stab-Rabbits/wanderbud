@@ -11,7 +11,7 @@ const { Pool } = require('pg');
 // const pool = new Pool(credentials);
 
 // Remote Database - ElephantSQL
-const PG_URI = 'postgres://nopyulan:WKLiI-Qx46dvnkVPu-YRJjbKuBBi9oJp@fanny.db.elephantsql.com/nopyulan'
+const PG_URI = 'postgres://khqsrrmw:sVc-Z7JeRjcJO2WmT9kmAT5VPkAwZMvt@castor.db.elephantsql.com/khqsrrmw'
 const pool = new Pool({connectionString: PG_URI});
 
 module.exports = {
