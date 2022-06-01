@@ -16,7 +16,7 @@ const loginForm = () => {
     //set values for the login form 
     const [values, setValues] = useState({
         email: '',
-        password:'' 
+        password: ''
     })
 
     //check for errors
@@ -29,7 +29,7 @@ const loginForm = () => {
         //values will be updated with their input values
         setValues({
             ...values,
-            [ name ]: value
+            [name]: value
         })
         setError(false);
     }
@@ -39,11 +39,11 @@ const loginForm = () => {
         const { email, password } = values;
         e.preventDefault();
 
-        if (!email || !password){
+        if (!email || !password) {
             setError(true);
             setValues({
                 email: '',
-                password:'' 
+                password: ''
             })
         } else {
             const login = async () => {
@@ -54,19 +54,30 @@ const loginForm = () => {
                     /* NEED TO CHANGE !!!!!!!! have backend send status, if user already exists in database, have signup error status be true and do not navigate to posts*/
                     console.log('login response', sendData.data)
 
-                    if(sendData.data) {
+                    if (sendData.data) {
                         dispatch(addUser(sendData.data.userData));
                         const { journeyData } = sendData.data;
-                        journeyData.map((obj) => obj.date = obj.date.toString().slice(0,10))
-                        dispatch(userJourney(journeyData));
-                        navigate("/journey"); 
+                        console.log('journeyData, ', journeyData);
+                        if (journeyData) {
+                            //journeyData.map((obj) => obj.date = obj.date.toString().slice(0,10))
+                            console.log('journeyData before mapping, ', journeyData);
+                            journeyData.map((obj) => obj.startDate = obj.startDate.toString().slice(0, 10))
+                            console.log('journeyData after first mapping, ', journeyData);
+                            journeyData.map((obj) => obj.endDate = obj.endDate.toString().slice(0, 10))
+                            console.log('journeyData after second mapping, ', journeyData);
+                            dispatch(userJourney(journeyData));
+                            navigate("/journey");
+                        } else {
+                            navigate("/journey");
+                        }
+
                     }
 
                 } catch (err) {
                     setError(true);
                     console.log('error', err);
                 }
-                
+
             }
 
             login();
@@ -74,8 +85,8 @@ const loginForm = () => {
             //set input fields back to blank fields
             setValues({
                 email: '',
-                password:'' 
-             })
+                password: ''
+            })
         }
     }
 
@@ -89,12 +100,12 @@ const loginForm = () => {
                 <h1> Welcome back </h1>
                 <div className="login-inputs">
                     <label htmlFor="email" className="login-label">Email </label>
-                    <input 
+                    <input
                         id="email"
-                        type="text" 
-                        name="email" 
-                        className="login-input" 
-                        placeholder="Enter your email"                        
+                        type="text"
+                        name="email"
+                        className="login-input"
+                        placeholder="Enter your email"
                         value={values.email}
                         onChange={onLogin}
                     />
@@ -102,11 +113,11 @@ const loginForm = () => {
                 {/* password */}
                 <div className="login-inputs">
                     <label htmlFor="password" className="login-label">Password </label>
-                    <input 
+                    <input
                         id="password"
-                        type="password" 
-                        name="password" 
-                        className="login-input" 
+                        type="password"
+                        name="password"
+                        className="login-input"
                         placeholder="Choose a password"
                         value={values.password}
                         onChange={onLogin}
@@ -116,9 +127,9 @@ const loginForm = () => {
                     <button className="login-form-btn" type="submit">Login</button>
                 </div>
                 {/* If field is missing, then display error message */}
-                {error && <p style={{color:"#FF3D2E"}}>Invalid email or password. Try Again</p>}
+                {error && <p style={{ color: "#FF3D2E" }}>Invalid email or password. Try Again</p>}
             </form>
-    
+
         </div>
     );
 

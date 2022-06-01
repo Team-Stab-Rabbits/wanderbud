@@ -51,14 +51,14 @@ const SearchTest = () => {
     const handleSubmit = e => {
         e.preventDefault();
         const { origin, destination, startDate, endDate, driver, select } = values;
-        let driverValue = null;
+        // let driverValue = null;
         // if (driver === true) {
         //     driverValue = 1;
         // } else {
         //     driverValue = 0;
         // }
-
-        driverValue = driver === true ? 1 : 0;
+        console.log('driver, ', driver);
+        // driverValue = driver === true ? 1 : 0;
 
         if (!origin || !destination || !startDate || !endDate || !select) {
             setError(true);
@@ -75,7 +75,7 @@ const SearchTest = () => {
                             dispatch(fetchJourney(findJourney.data));
                         }
                     } else if (select === "create") {
-                        const createJourney = await axios.post('http://localhost:3000/journey/create', { origin, destination, startDate, endDate, driver: driverValue, user_id });
+                        const createJourney = await axios.post('http://localhost:3000/journey/create', { origin, destination, startDate, endDate, driver, user_id });
                         console.log('post journey', createJourney.data);
 
                         if (createJourney.data) {

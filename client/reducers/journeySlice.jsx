@@ -10,10 +10,10 @@ export const journeySlice = createSlice({
     upcomingJourneys: [],
     completedJourneys: []
   },
-  
+
   //reducer functions
   reducers: {
-      //GET REQUEST
+    //GET REQUEST
     fetchJourney: (state, action) => {
       //response is array
       state.journeys = [...action.payload];
@@ -26,8 +26,8 @@ export const journeySlice = createSlice({
 
     // JOIN POST WILL BE A STRETCH FEATURE
     joinJourney: (state, action) => {
-        // state.posts[action.payload.id].buds.push(action.payload.user)
-        state.upcomingJourneys.push(action.payload);
+      // state.posts[action.payload.id].buds.push(action.payload.user)
+      state.upcomingJourneys.push(action.payload);
     },
 
     unjoinJourney: (state, action) => {

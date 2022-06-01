@@ -27,7 +27,7 @@ CREATE TABLE public.userJourney (
     "id" serial,
     "userID" integer NOT NULL,
     "journeyID" integer NOT NULL,
+    "driver" boolean,
     "cost" integer,
-    "driver" integer,
     CONSTRAINT "userJourney_pk" PRIMARY KEY ("id")
 );
