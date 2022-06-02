@@ -5,7 +5,7 @@ const { userSlice } = require('../../client/reducers/userSlice.jsx');
 const journeyActions = journeySlice.actions;
 const userActions = userSlice.actions;
 
-describe('State Testing', () => {
+xdescribe('State Testing', () => {
   let userState;
   let journeyState;
 
@@ -64,7 +64,7 @@ describe('State Testing', () => {
   })
 }),
 
-describe('Reducer Testing', () => {
+xdescribe('Reducer Testing', () => {
   let userState;
   let journeyState;
 

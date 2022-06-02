@@ -3,10 +3,10 @@ const store = require('../../client/store');
 import React from 'react';
 import Day from '../../client/components/Day.jsx';
 import { render, screen, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom'; 
 /**
- * @jest-environment jsdom
+ * @jest-environment-jsdom
  */
-
 
 /*
   | Day component
@@ -78,12 +78,14 @@ describe('Day component tests', () => {
       }
     ]
   }
-  beforeAll( () => {
-    component = render(<Day id={props.dayNum} style='color: blue' />);
+  beforeAll(() => { 
+    component = render(<Day id={props.dayNum} />);
   });
   
   it('renders a day to the page', () => {
+   
     const currentDay = document.getElementById('1');
+    console.log(currentDay.id); 
     expect(currentDay).toHaveStyle('color: blue');
   })
 

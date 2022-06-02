@@ -1,7 +1,8 @@
 {
   "name": "wanderbud",
   "jest": {
-    "verbose": true
+    "verbose": true,
+    "testEnvironment": "jest-environment-jsdom"
   },
   "version": "1.0.0",
   "description": "",
@@ -12,7 +13,7 @@
     "server-only": "nodemon ./server/server.js",
     "test-server": "concurrently \"cross-env NODE_ENV=development webpack-dev-server --open --hot\" \"nodemon ./server/test-server.js\"",
     "dev": "concurrently \"cross-env NODE_ENV=development webpack-dev-server --open --hot\" \"nodemon ./server/server.js\"",
-    "test": "jest --verbose"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -57,6 +58,7 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.18.0",
     "@babel/preset-env": "^7.18.0",
     "@babel/preset-react": "^7.17.12",
+    "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "babel-loader": "^8.2.5",
     "concurrently": "^7.2.1",
@@ -64,6 +66,8 @@
     "css-loader": "^6.7.1",
     "html-webpack-plugin": "^5.5.0",
     "jest": "^28.1.0",
+    "jest-environment-jsdom": "^28.1.0",
+    "jsdom": "^19.0.0",
     "nodemon": "^2.0.16",
     "rimraf": "^3.0.2",
     "sass": "^1.52.1",
