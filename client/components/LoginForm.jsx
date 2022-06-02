@@ -65,6 +65,7 @@ const loginForm = () => {
                             console.log('journeyData after first mapping, ', journeyData);
                             journeyData.map((obj) => obj.endDate = obj.endDate.toString().slice(0, 10))
                             console.log('journeyData after second mapping, ', journeyData);
+                            //NEED TO ADD THIS TO WHEN WE CREATE A NEW JOURNEY USING SUBMIT
                             dispatch(userJourney(journeyData));
                             navigate("/journey");
                         } else {
