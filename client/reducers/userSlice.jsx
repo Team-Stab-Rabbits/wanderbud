@@ -7,13 +7,13 @@ export const userSlice = createSlice({
   initialState: {
     users: {}, //should be array or object?
     id: null,
-    age:'',
-    email:'',
+    age: '',
+    email: '',
     firstName: '',
     lastName: ''
     //{id1 : {user info}, id2: {user info}}
   },
-  
+
   //reducer functions
   reducers: {
     // populateUsers: (state, action) => {
@@ -22,13 +22,13 @@ export const userSlice = createSlice({
     // },
     // fetchUsers: (state, action) => {
     //   action.payload.map((el)=> state.users[el.id] = el);
-      
+
     // },
 
     //SIGNUP USER REDUCER FUNCTION - 1st thing to be done!
 
     addUser: (state, action) => {
-      const { age, email, id, firstName, lastName} = action.payload;
+      const { age, email, id, firstName, lastName } = action.payload;
       state.age = age;
       state.email = email;
       state.id = id;
@@ -48,6 +48,15 @@ export const userSlice = createSlice({
 
       delete state.users[action.payload.id];
 
+    },
+
+    logoutUser: (state, action) => {
+      state.age = '';
+      state.email = '';
+      state.id = null;
+      state.firstName = '';
+      state.lastName = '';
+      console.log('logoutUser reducer was triggered')
     }
 
   },
@@ -55,7 +64,7 @@ export const userSlice = createSlice({
 })
 
 
-export const { addUser, joinUser, deleteUser } = userSlice.actions
+export const { addUser, joinUser, deleteUser, logoutUser } = userSlice.actions
 
 
 //SELECTORS TO INCLUDE
@@ -65,8 +74,8 @@ export const { addUser, joinUser, deleteUser } = userSlice.actions
 export const selectUserId = (state) => state.users.id
 export const selectFirstname = (state) => state.users.firstName
 export const selectLoggedInUser = (state) => {
-  const { id, age, email,firstName, lastName} = state.users;
-  return { id, age, email,firstName, lastName}
+  const { id, age, email, firstName, lastName } = state.users;
+  return { id, age, email, firstName, lastName }
 }
 
 export default userSlice.reducer

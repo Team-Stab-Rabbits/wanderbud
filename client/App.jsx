@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
-// import { useDispatch } from 'react-redux';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Landing from "./containers/Landing";
 import Login from "./containers/Login";
 import Journey from "./containers/Journey";
 import Profile from "./containers/Profile";
 import Wanderbud from "./media/wanderbud-logo.png"
+import { logoutUser } from './reducers/userSlice.jsx'
 
 
 import { selectFirstname } from './reducers/userSlice';
@@ -16,25 +16,22 @@ import { selectFirstname } from './reducers/userSlice';
 
 
 const App = () => {
+  //  useSelector hook creates a link/reference to the store, specifically to the firstName within the userSlice (line 75)
   let firstName = useSelector(selectFirstname);
-  const navigate = useNavigate();
 
+  //  Initialize useDispatch hook within the top level functional component so we can dispatch actions within helper functions 
+  const dispatch = useDispatch();
+
+  //  onClick function which resets the user state within the store
   const handleLogout = () => {
-    return firstName = undefined;
-  }
-
-  const handleLogo = () => {
-    //if there is a first name defined, route to '/journey'
-    if (firstName) return navigate('/journey');
-    //if there is no first name, route to '/'
-    return navigate('/');
+    dispatch(logoutUser());
   }
 
   return (
     <Router>
       <nav className="navbar">
         <img className="navbar-logo" src={Wanderbud} alt="Wanderbud" />
-        <h1 onClick={handleLogo}>wanderBud</h1>
+        <h1>wanderBud</h1>
         <div className="navbar-links">
           {!firstName && <Link className="navbar-link" to="/"> Home </Link>}
           {!firstName && <Link className="navbar-link" to="/login">Login </Link>}
@@ -52,10 +49,6 @@ const App = () => {
         {/* <Route path="*" element={<ErrorPage />}/>  */}
       </Routes>
     </Router>
-
-    // <div>
-    //   <PostDisplay />
-    // </div>
   );
 }
 
