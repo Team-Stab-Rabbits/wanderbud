@@ -1,9 +1,5 @@
 {
   "name": "wanderbud",
-  "jest": {
-    "verbose": true,
-    "testEnvironment": "jest-environment-jsdom"
-  },
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
