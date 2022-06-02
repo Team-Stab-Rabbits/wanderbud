@@ -8,6 +8,7 @@ import { selectJourney } from '../reducers/journeySlice';
 import SearchTest from './SearchTest';
 import journeyImg from '../media/journey-img.png'
 import { v4 as uuidv4 } from 'uuid';
+import Month from './Month';
 
 const JourneyDisplay = () => {
 
@@ -32,6 +33,7 @@ const JourneyDisplay = () => {
             <div className="journey-img">
                 <img src={journeyImg} alt="journey image" className="journey-png" />
             </div>
+            <Month />
             <SearchTest />
             {renderJourneys}
         </div>
