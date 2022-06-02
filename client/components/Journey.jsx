@@ -130,8 +130,6 @@ const Journey = ({ journey, index }) => {
                     <div className="join-btn">
                         {creator.user_id === user_id ? <button className="deleteButton" onClick={handleDelete}>X</button> : <button className="joinButton" onClick={handleClick}>{toggle ? "Join" : "Unjoin"}</button>}
                     </div>
-
-
                 </div>
 
                 <div className="bottomPart">
