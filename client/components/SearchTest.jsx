@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchJourney } from '../reducers/journeySlice';
+import { fetchJourney, userJourney, selectUpcomingJourneys } from '../reducers/journeySlice';
 import { selectUserId } from '../reducers/userSlice';
 import axios from 'axios';
 
@@ -10,6 +10,8 @@ import axios from 'axios';
 const SearchTest = () => {
     //select userID 
     const user_id = useSelector(selectUserId);
+    //  Use the useSelector hook to access the user's current journeys from state (stored under selectUpcomingJourneys)
+    const upcomingJourneys = useSelector(selectUpcomingJourneys);
 
     const dispatch = useDispatch();
     const [values, setValues] = useState({
@@ -57,7 +59,7 @@ const SearchTest = () => {
         // } else {
         //     driverValue = 0;
         // }
-        console.log('driver, ', driver);
+        console.log('driver')
         // driverValue = driver === true ? 1 : 0;
 
         if (!origin || !destination || !startDate || !endDate || !select) {
@@ -75,11 +77,19 @@ const SearchTest = () => {
                             dispatch(fetchJourney(findJourney.data));
                         }
                     } else if (select === "create") {
+                        // If the selector is set to 'create a journey', query the database to create that journey and assign the returned journey to the label 'createJourney'
                         const createJourney = await axios.post('http://localhost:3000/journey/create', { origin, destination, startDate, endDate, driver, user_id });
                         console.log('post journey', createJourney.data);
 
+                        //  If the query was successful and returns data...
                         if (createJourney.data) {
-                            dispatch(fetchJourney(createJourney.data))
+                            // Dispatch an action creator with the created journey as the payload to add the journey to state
+                            dispatch(fetchJourney(createJourney.data));
+                            //Dispatch an action creator with the original state and created journey as the payload to rerender the profile
+
+                            console.log('What we think should work: ', [...upcomingJourneys, ...createJourney.data])
+                            console.log('What we had before: ', ...upcomingJourneys, ...createJourney.data)
+                            dispatch(userJourney([...upcomingJourneys, ...createJourney.data]));
                         }
                     }
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectFirstname } from '../reducers/userSlice';
 import { selectJourney, selectUpcomingJourneys } from '../reducers/journeySlice';
@@ -10,43 +10,46 @@ const Profile = () => {
     const journeys = useSelector(selectJourney);
     const upcomingJourneys = useSelector(selectUpcomingJourneys);
 
-    const allJourneys = [...upcomingJourneys];
+    let allJourneys = [...upcomingJourneys];
 
-    console.log('allJourneys', allJourneys);
+    console.log('allJourneys within Profile.jsx', allJourneys);
 
-    const userJourneys = allJourneys.sort(el=> el.date).map(el => {
-        const { origin, destination, date } = el;
+    let userJourneys = allJourneys.sort(el => el.startDate).map(el => {
+        const { origin, destination, startDate, endDate } = el;
         return (
             <div className="userJourney" key={uuidv4()}>
-                 <div className="journey-logo">
-                <img className="journey-img" src={wanderbud} />
-            </div>
-            <div className="mainFrame">
-                <div className="topPart">
-                    <div className="journey-label">
-                        <p className="journey-trait-label">Origin: </p>
-                        <p className="journey-trait">{origin}</p>
-                    </div>
-
-                    <div className="journey-label">
-                        <p className="journey-trait-label">Destination:</p>
-                        <p className="journey-trait">{destination}</p>
-                    </div>
-
-                    <div className="journey-label">
-                        <p className="journey-trait-label" >Date:</p>
-                        <p className="journey-trait" >{date}</p>
-                    </div>
-                
+                <div className="journey-logo">
+                    <img className="journey-img" src={wanderbud} />
                 </div>
-            </div>
+                <div className="mainFrame">
+                    <div className="topPart">
+                        <div className="journey-label">
+                            <p className="journey-trait-label">Origin: </p>
+                            <p className="journey-trait">{origin}</p>
+                        </div>
+
+                        <div className="journey-label">
+                            <p className="journey-trait-label">Destination:</p>
+                            <p className="journey-trait">{destination}</p>
+                        </div>
+
+                        <div className="journey-label">
+                            <p className="journey-trait-label" >Start Date:</p>
+                            <p className="journey-trait" >{startDate}</p>
+                        </div>
+
+                        <div className="journey-label">
+                            <p className="journey-trait-label" >End Date:</p>
+                            <p className="journey-trait" >{endDate}</p>
+                        </div>
+
+                    </div>
+                </div>
             </div>
         )
     })
-    
 
-
-   return (
+    return (
 
         <div className="profile">
             <div className="profile-header">
@@ -61,7 +64,7 @@ const Profile = () => {
 
         </div>
 
-   )
+    )
 
 
 }
