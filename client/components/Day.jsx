@@ -6,7 +6,7 @@ import axios from 'axios';
 
 const Day = props => {
   return (
-    <div className='Day' num={props.dayNum}>
+    <div id={props.id} className='Day' num={props.dayNum} style={{color: 'blue'}}>
       <div className=''/>
     </div> 
   );
